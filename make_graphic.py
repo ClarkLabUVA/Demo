@@ -1390,7 +1390,7 @@ def upload(f,name,folder):
 
     #filename = get_filename(file)
 
-    minioClient = Minio('minionas.int.uvadcos.io',
+    minioClient = Minio('minio:9000',
                     access_key='breakfast',
                     secret_key='breakfast',
                     secure=False)
@@ -1432,7 +1432,7 @@ def define_structure(string, format_type):
 def make_graphic(hr):
     time = hr['time'].to_numpy() / 60 / 60
     #print(np.max(time))
-    steps = (np.max(time) - np.min(time)) / 45
+    steps = (np.max(time) - np.min(time)) / 46
     time2 = np.round(np.arange(np.min(time),np.max(time),steps))
     #print(time2)
     #hr2  = hr.drop(['Unnamed: 0','time','First moment'],axis = 1)
