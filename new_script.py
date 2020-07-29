@@ -227,7 +227,7 @@ preproc.connect([(infosource, selectfiles, [('subject_id', 'subject_id'),
 # Create preproc output graph
 preproc.write_graph(graph2use='colored', format='png', simple_form=True)
 
-os.rename(opj(preproc.base_dir, 'preproc', 'graph.dot'), "/output/graph.dot")
+# os.rename(opj(preproc.base_dir, 'preproc', 'graph.dot'), "/output/graph.dot")
 # Visualize the graph
 # from IPython.display import Image
 # Image(filename=opj(preproc.base_dir, 'preproc', 'graph.png'))
@@ -238,7 +238,7 @@ os.rename(opj(preproc.base_dir, 'preproc', 'graph.dot'), "/output/graph.dot")
 
 # Visualize the detailed graph
 preproc.write_graph(graph2use='flat', format='png', simple_form=True)
-os.rename(opj(preproc.base_dir, 'preproc', 'graph_detailed.dot'), "/output/graph_detailed.dot")
+# os.rename(opj(preproc.base_dir, 'preproc', 'graph_detailed.dot'), "/output/graph_detailed.dot")
 #Image(filename=opj(preproc.base_dir, 'preproc', 'graph_detailed.png'))
 
 
