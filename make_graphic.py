@@ -1448,7 +1448,7 @@ def make_graphic(hr):
     ax.set_yticklabels(time2)
     ax.tick_params(axis='both', which='major', labelsize=5)
 
-    plt.savefig('hist-heatmap.png',format='png', dpi=500,bbox_inches = "tight")
+    plt.savefig('hist-heatmap.png',format='png', dpi=800,bbox_inches = "tight")
     #plt.show()
 
 # Given pandas dataframe, it will return a spark's dataframe.
