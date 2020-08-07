@@ -1,8 +1,8 @@
 import requests, json, os
 
 FAIR_URL = 'https://clarklab.uvarc.io/'
-
-def upload_file(file_path,metadata):
+TOKEN ="Ag1p5VMeKy088Pqr25znBOyJXz6BVNQKyW4pPQDEjBBVEembgKC2Cevykm3Y5zGPJly9MzyBJml2akT4YKdvguBk9nfoBWxIDoBQiwDPVubwvV"
+def upload_file(file_path,metadata,token = TOKEN):
     """
     Uploads data with associated metadata using transfer service.
     Returns minted PID
@@ -25,13 +25,14 @@ def upload_file(file_path,metadata):
         files = {
             'files':open(file_path,'rb'),
             'metadata':json.dumps(metadata)
-        }
+        },
+        headers = {"Authorization": token}
     )
 
     try:
         minted_id = upload_response.json()['Minted Identifiers'][0]
     except:
-        return upload_response.json()
+        return upload_response.content.decode()
 
     return minted_id
 
@@ -51,7 +52,7 @@ def search(query):
 
     return matches
 
-def mint_id(metadata,namespace = '99999'):
+def mint_id(metadata,namespace = '99999',token = TOKEN):
     """
     Mint an identifier for given metadata.
 
@@ -66,14 +67,16 @@ def mint_id(metadata,namespace = '99999'):
     if not isinstance(metadata,dict):
         raise Exception('metadata must be a dict.')
 
-    created = requests.post(FAIR_URL + 'mds/shoulder/ark:' + namespace,data = json.dumps(metadata))
+    created = requests.post(FAIR_URL + 'mds/shoulder/ark:' + namespace,
+                data = json.dumps(metadata),
+                headers = {"Authorization": token})
 
     try:
         return created.json()['created']
     except:
-        return created.json()
+        return created.content.decode()
 
-def delete_id(pid):
+def delete_id(pid,token = TOKEN):
     """
     Deletes the given id.
 
@@ -86,12 +89,13 @@ def delete_id(pid):
     if not isinstance(pid,str):
         raise Exception('PID must be string.')
 
-    deleted = requests.delete(FAIR_URL + 'mds/' + pid)
+    deleted = requests.delete(FAIR_URL + 'mds/' + pid,
+                            headers = {"Authorization": token})
 
     return deleted.json()
 
 
-def update_pid(pid,changes):
+def update_pid(pid,changes,token = TOKEN):
     """
     Updates metadata for a given pid.
 
@@ -108,11 +112,13 @@ def update_pid(pid,changes):
     if not isinstance(changes,dict):
         raise Exception('changes must be a dict.')
 
-    update = requests.put(FAIR_URL + 'mds/' + pid,data = json.dumps(changes))
+    update = requests.put(FAIR_URL + 'mds/' + pid,
+                            data = json.dumps(changes),
+                            headers = {"Authorization": token})
 
     return update.json()
 
-def retrieve_metadata(pid):
+def retrieve_metadata(pid,token = TOKEN):
     """
     Retrives metadata from mds for given pid.
 
@@ -125,11 +131,15 @@ def retrieve_metadata(pid):
     if not isinstance(pid,str):
         raise Exception('PID must be string.')
 
-    metadata_request = requests.get('https://clarklab.uvarc.io/mds/' + pid)
+    metadata_request = requests.get('https://clarklab.uvarc.io/mds/' + pid,
+                                headers = {"Authorization": token})
 
-    return metadata_request.json()
+    try:
+        return metadata_request.json()
+    except:
+        return metadata_request.content.decode()
 
-def create_namespace(namespace,namespace_meta):
+def create_namespace(namespace,namespace_meta,token = TOKEN):
     """
     Create namespace.
 
@@ -140,11 +150,12 @@ def create_namespace(namespace,namespace_meta):
     """
 
     namespace = requests.post(FAIR_URL + 'mds/ark:' + namespace,
-                                data = json.dumps(namespace_meta))
+                                data = json.dumps(namespace_meta),
+                                headers = {"Authorization": token})
 
     return namespace.json()
 
-def compute(data_id,script_id,job_type,container_id = '',namespace = '99999'):
+def compute(data_id,script_id,job_type,container_id = '',namespace = '99999',token = TOKEN):
     """
     Runs computation on given data and script.
 
@@ -179,44 +190,29 @@ def compute(data_id,script_id,job_type,container_id = '',namespace = '99999'):
 
     job_request = requests.post(
         "https://clarklab.uvarc.io/compute/" + job_type,
-        json = job
+        json = job,
+        headers = {"Authorization": token}
     )
 
     job_id = job_request.content.decode()
 
     return job_id
 
-def list_running_jobs():
+def list_running_jobs(token = TOKEN):
     """
     Returns list of all running jobs.
     """
 
     job_request = requests.get(
         "https://clarklab.uvarc.io/compute/job",
+        headers = {"Authorization": token}
     )
 
     running_pods = job_request.json()['runningJobIds']
 
     return running_pods
 
-def check_job_status(pid):
-    """
-    Returns status of job for given pid.
-
-    Parameters
-    ----------
-    pid : string (mandatory)
-        PID of interest.
-    """
-    if not isinstance(pid,str):
-        raise Exception('PID must be string.')
-
-    status = requests.get(FAIR_URL + 'compute/job/' + pid)
-
-    return status.json()
-
-
-def evidence_graph(pid):
+def evidence_graph(pid,token = TOKEN):
     """
     Retrives evidence graph for given pid.
 
@@ -229,11 +225,12 @@ def evidence_graph(pid):
     if not isinstance(pid,str):
         raise Exception('PID must be string.')
 
-    eg_request = requests.get(FAIR_URL + 'evidencegraph/' + pid)
+    eg_request = requests.get('https://clarklab.uvarc.io/evidencegraph/' + pid,
+                        headers = {"Authorization": token})
 
     return eg_request.json()
 
-def download_file(pid,file_name = ''):
+def download_file(pid,file_name = '',token = TOKEN):
     """
     Downloads data of given ark.
 
@@ -254,7 +251,8 @@ def download_file(pid,file_name = ''):
 
 
     data = requests.get(
-    FAIR_URL + 'transfer/data/' + pid
+    'https://clarklab.uvarc.io/transfer/data/' + pid,
+    headers = {"Authorization": token}
     )
 
     data = data.content
