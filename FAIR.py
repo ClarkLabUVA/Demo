@@ -36,7 +36,7 @@ def upload_file(file_path,metadata,token = TOKEN):
 
     return minted_id
 
-def search(query):
+def search(query,token = TOKEN):
     """
     text search metadata
 
@@ -48,7 +48,9 @@ def search(query):
     if not isinstance(query,str):
         raise Exception('query must be of type string')
 
-    matches = requests.get(FAIR_URL + 'search/' + query).json()['matches']
+    matches = requests.get(FAIR_URL + 'search/' + query,
+                            headers = {"Authorization": token}
+                                                        ).json()['matches']
 
     return matches
 
