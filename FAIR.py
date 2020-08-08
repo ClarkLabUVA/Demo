@@ -1,7 +1,7 @@
 import requests, json, os
 
 FAIR_URL = 'https://clarklab.uvarc.io/'
-TOKEN ="Ag1p5VMeKy088Pqr25znBOyJXz6BVNQKyW4pPQDEjBBVEembgKC2Cevykm3Y5zGPJly9MzyBJml2akT4YKdvguBk9nfoBWxIDoBQiwDPVubwvV"
+TOKEN = ''
 def upload_file(file_path,metadata,token = TOKEN):
     """
     Uploads data with associated metadata using transfer service.
