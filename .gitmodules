@@ -1,0 +1,6 @@
+[submodule "Spark-Demo"]
+	path = Spark-Demo
+	url = https://github.com/fairscape/Spark-Demo
+[submodule "Nipype-Demo"]
+	path = Nipype-Demo
+	url = https://github.com/fairscape/Nipype-Demo
