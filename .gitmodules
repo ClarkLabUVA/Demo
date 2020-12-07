@@ -1,0 +1,3 @@
+[submodule "Nypipe-Demo"]
+	path = Nypipe-Demo
+	url = https://github.com/fairscape/Nipype-Demo.git
